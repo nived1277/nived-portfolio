@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nived Sunil | Portfolio — AI/ML Specialist & Data Engineer</title>
+    <meta name="description"
+        content="Personal Portfolio of Nived Sunil - Computer Science & Engineering Specialized in AI & ML Graduate, Web Intern.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Cinematic Desk Setup Intro Screen -->
+    <div id="cinematic-intro" class="cinematic-intro">
+        <div class="desk-environment">
+            <!-- Ambient LED Backlight Glow Behind Monitor -->
+            <div class="desk-red-glow"></div>
+            <div class="desk-spotlight"></div>
+
+            <!-- Modern Desk Setup Wrapper -->
+            <div class="desk-scene">
+                <!-- Desktop Monitor Structure -->
+                <div class="monitor-wrapper" id="monitorWrapper">
+                    <div class="monitor-bezel">
+                        <div class="monitor-camera-dot"></div>
+                        <div class="monitor-screen" id="introMonitorScreen">
+                            <!-- Portfolio Screen Preview Frame -->
+                            <div class="screen-preview-content">
+                                <div class="preview-navbar">
+                                    <img src="images/ns_logo.png" alt="NS Logo" class="preview-logo">
+                                    <div class="preview-dots"><span></span><span></span><span></span></div>
+                                </div>
+                                <div class="preview-hero">
+                                    <div class="preview-tag">AI/ML GRADUATE &bull; WEB INTERN</div>
+                                    <h1 class="preview-title">NIVED <span class="accent">SUNIL</span></h1>
+                                    <p class="preview-sub">Computer Science & Engineering Specialized in Artificial
+                                        Intelligence & Machine Learning</p>
+                                    <div class="preview-mini-canvas">
+                                        <div class="preview-wave-glow"></div>
+                                    </div>
+                                </div>
+                                <!-- Interactive Enter Portfolio Overlay -->
+                                <div class="screen-enter-overlay">
+                                    <button class="enter-portfolio-btn" id="enterPortfolioBtn"
+                                        aria-label="Enter Portfolio">
+                                        <span class="pulse-ring"></span>
+                                        <span class="btn-icon">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2.5">
+                                                <path d="M5 12h14M12 5l7 7-7 7" />
+                                            </svg>
+                                        </span>
+                                        <span class="btn-text">CLICK TO ENTER PORTFOLIO</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="screen-glare"></div>
+                        </div>
+                        <div class="monitor-brand">NIVED SUNIL</div>
+                    </div>
+                    <!-- Metallic Monitor Stand -->
+                    <div class="monitor-neck"></div>
+                    <div class="monitor-base"></div>
+                </div>
+
+                <!-- Sleek Desk Surface & Ambient Details -->
+                <div class="desk-surface">
+                    <div class="keyboard-glow"></div>
+                    <div class="desk-edge-light"></div>
+                </div>
+            </div>
+
+            <div class="intro-hint-bar">
+                <span>CLICK MONITOR TO ZOOM IN & EXPLORE PORTFOLIO</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ambient Background Canvas / Grid Overlay -->
+    <div class="ambient-bg">
+        <canvas id="ocean-canvas"></canvas>
+        <div class="glow-orb orb-top"></div>
+        <div class="glow-orb orb-bottom"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="logo-img-link" aria-label="Nived Sunil Portfolio Home">
+                <img src="images/ns_logo.png" alt="NS Logo" class="nav-logo-img">
+            </a>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#education" class="nav-link">Education</a>
+                <a href="#certificates" class="nav-link">Certificates</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-right">
+                <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle light or dark theme"
+                    title="Toggle Theme">
+                    <div class="theme-toggle-icon-wrapper">
+                        <!-- Moon Icon (Dark Mode) -->
+                        <svg class="theme-icon icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <!-- Sun Icon (Light Mode) -->
+                        <svg class="theme-icon icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                </button>
+
+                <a href="Nived_Sunil_Resume.pdf" download class="nav-resume-btn">
+                    <span>Resume</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </a>
+
+                <!-- Mobile Hamburger Menu Button -->
+                <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle navigation menu"
+                    aria-expanded="false">
+                    <span class="hamburger-line line-1"></span>
+                    <span class="hamburger-line line-2"></span>
+                    <span class="hamburger-line line-3"></span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Backdrop Overlay -->
+        <div id="navOverlay" class="nav-overlay"></div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-inner">
+                <div class="hero-tag">AI/ML GRADUATE &bull; WEB INTERN</div>
+
+                <h1 class="hero-title">
+                    <span class="drip-wrapper">
+                        <span class="drip-letter">N</span>
+                        <span class="crystal-drip-bead"></span>
+                    </span>IVED <span class="title-accent">SUNIL</span>
+                </h1>
+
+                <p id="typing" class="hero-subtitle">
+                    Computer Science & Engineering Specialized in Artificial Intelligence & Machine Learning Graduate |
+                    Web Intern | Data Engineer
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#projects" class="primary-btn">
+                        <span>EXPLORE WORK</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+
+                    <a href="#about" class="secondary-btn">
+                        <span>DISCOVER MORE</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                <span class="scroll-text">SCROLL</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="about-section reveal">
+            <div class="container">
+                <div class="section-tag">01 / ABOUT ME</div>
+
+                <div class="about-grid">
+                    <div class="about-text-col">
+                        <h2 class="section-title">Architecting Intelligence & Impactful Systems</h2>
+
+                        <p class="about-bio lead">
+                            I am a <strong>Computer Science & Engineering Specialized in Artificial Intelligence &
+                                Machine Learning</strong> graduate and Web Intern passionate about Artificial
+                            Intelligence, Data Engineering, Machine Learning and building impactful technology
+                            solutions.
+                        </p>
+                        <p class="about-bio">
+                            I enjoy exploring emerging technologies and creating projects that solve real-world
+                            problems—spanning deep learning diagnostic systems, IoT predictive maintenance stacks,
+                            generative AI platforms, and offline emergency response tools.
+                        </p>
+
+                        <!-- Stats Grid -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-num">4+</div>
+                                <div class="stat-label">Projects Built</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-num">1</div>
+                                <div class="stat-label">Research Work in Progress</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-num">2026</div>
+                                <div class="stat-label">B.Tech AI & ML Graduate</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-num">AI + Web</div>
+                                <div class="stat-label">Core Focus Areas</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Three Photo Scroll Carousel -->
+                    <div class="about-photo-col">
+                        <div class="carousel-container" id="photoCarousel">
+                            <div class="photo-card photo-left" data-index="0">
+                                <img src="images/nived_photo1.jpg" alt="Nived Sunil">
+                            </div>
+
+                            <div class="photo-card photo-center" data-index="1">
+                                <img src="images/nived_photo2.jpg" alt="Nived Sunil">
+                            </div>
+
+                            <div class="photo-card photo-right" data-index="2">
+                                <img src="images/nived_photo1.jpg" alt="Nived Sunil">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="experience-section reveal">
+            <div class="container">
+                <div class="section-tag">02 / EXPERIENCE</div>
+                <h2 class="section-title">Professional Journey</h2>
+
+                <div class="editorial-timeline">
+                    <div class="timeline-entry">
+                        <div class="entry-meta">
+                            <span class="entry-num">01</span>
+                            <span class="entry-period">PRESENT</span>
+                        </div>
+
+                        <div class="entry-content">
+                            <div class="entry-header">
+                                <h3 class="entry-role">WEB INTERN</h3>
+                                <span class="entry-company">AI & Web Technology Domain</span>
+                            </div>
+                            <p class="entry-desc">
+                                Spearheaded full-stack web applications and AI model integrations. Engineered
+                                high-performance backend microservices using Python and FastAPI, designed sleek user
+                                interfaces, and implemented RESTful API communication pipelines for intelligent
+                                user-facing systems.
+                            </p>
+                            <div class="entry-tags">
+                                <span>Web Development</span>
+                                <span>FastAPI</span>
+                                <span>Google Gemini AI</span>
+                                <span>REST APIs</span>
+                                <span>Frontend Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills-section reveal">
+            <div class="container">
+                <div class="section-tag">03 / SKILLS & TECH STACK</div>
+                <h2 class="section-title">Technical Expertise</h2>
+            </div>
+
+            <!-- Premium Floating Dual-Row Infinite Marquee -->
+            <div class="skills-marquee-container">
+                <div class="marquee-fade marquee-fade-left"></div>
+                <div class="marquee-fade marquee-fade-right"></div>
+
+                <div class="marquee-wrapper">
+                    <!-- Top Row: Slow Elegant Left to Right Continuous Float -->
+                    <div class="marquee-track track-left-to-right">
+                        <div class="marquee-group">
+                            <div class="skill-card"><span class="skill-name">Python</span></div>
+                            <div class="skill-card"><span class="skill-name">SQL</span></div>
+                            <div class="skill-card"><span class="skill-name">Java</span></div>
+                            <div class="skill-card"><span class="skill-name">JavaScript</span></div>
+                            <div class="skill-card"><span class="skill-name">HTML</span></div>
+                            <div class="skill-card"><span class="skill-name">CSS</span></div>
+                            <div class="skill-card"><span class="skill-name">React</span></div>
+                            <div class="skill-card"><span class="skill-name">Django</span></div>
+                            <div class="skill-card"><span class="skill-name">FastAPI</span></div>
+                            <div class="skill-card"><span class="skill-name">REST API</span></div>
+                            <div class="skill-card"><span class="skill-name">Git</span></div>
+                            <div class="skill-card"><span class="skill-name">GitHub</span></div>
+                        </div>
+                        <div class="marquee-group" aria-hidden="true">
+                            <div class="skill-card"><span class="skill-name">Python</span></div>
+                            <div class="skill-card"><span class="skill-name">SQL</span></div>
+                            <div class="skill-card"><span class="skill-name">Java</span></div>
+                            <div class="skill-card"><span class="skill-name">JavaScript</span></div>
+                            <div class="skill-card"><span class="skill-name">HTML</span></div>
+                            <div class="skill-card"><span class="skill-name">CSS</span></div>
+                            <div class="skill-card"><span class="skill-name">React</span></div>
+                            <div class="skill-card"><span class="skill-name">Django</span></div>
+                            <div class="skill-card"><span class="skill-name">FastAPI</span></div>
+                            <div class="skill-card"><span class="skill-name">REST API</span></div>
+                            <div class="skill-card"><span class="skill-name">Git</span></div>
+                            <div class="skill-card"><span class="skill-name">GitHub</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Row: Slow Elegant Right to Left Continuous Float -->
+                    <div class="marquee-track track-right-to-left">
+                        <div class="marquee-group">
+                            <div class="skill-card"><span class="skill-name">Machine Learning</span></div>
+                            <div class="skill-card"><span class="skill-name">Data Engineering</span></div>
+                            <div class="skill-card"><span class="skill-name">Artificial Intelligence</span></div>
+                            <div class="skill-card"><span class="skill-name">PyTorch</span></div>
+                            <div class="skill-card"><span class="skill-name">TensorFlow</span></div>
+                            <div class="skill-card"><span class="skill-name">YOLOv8</span></div>
+                            <div class="skill-card"><span class="skill-name">IoT</span></div>
+                            <div class="skill-card"><span class="skill-name">MQTT</span></div>
+                            <div class="skill-card"><span class="skill-name">Tailwind CSS</span></div>
+                            <div class="skill-card"><span class="skill-name">Leaflet</span></div>
+                            <div class="skill-card"><span class="skill-name">SQLite</span></div>
+                            <div class="skill-card"><span class="skill-name">Google Gemini AI</span></div>
+                        </div>
+                        <div class="marquee-group" aria-hidden="true">
+                            <div class="skill-card"><span class="skill-name">Machine Learning</span></div>
+                            <div class="skill-card"><span class="skill-name">Data Engineering</span></div>
+                            <div class="skill-card"><span class="skill-name">Artificial Intelligence</span></div>
+                            <div class="skill-card"><span class="skill-name">PyTorch</span></div>
+                            <div class="skill-card"><span class="skill-name">TensorFlow</span></div>
+                            <div class="skill-card"><span class="skill-name">YOLOv8</span></div>
+                            <div class="skill-card"><span class="skill-name">IoT</span></div>
+                            <div class="skill-card"><span class="skill-name">MQTT</span></div>
+                            <div class="skill-card"><span class="skill-name">Tailwind CSS</span></div>
+                            <div class="skill-card"><span class="skill-name">Leaflet</span></div>
+                            <div class="skill-card"><span class="skill-name">SQLite</span></div>
+                            <div class="skill-card"><span class="skill-name">Google Gemini AI</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section reveal">
+            <div class="container">
+                <div class="section-tag">04 / SELECTED WORK</div>
+                <h2 class="section-title">Featured Projects</h2>
+
+                <div class="projects-stack" id="projectsStack">
+
+                    <!-- Project Card 1 -->
+                    <article class="project-card" data-project-index="0">
+                        <div class="project-content">
+                            <span class="project-num">01 / DIAGNOSTICS</span>
+                            <h3 class="project-title">AI-Based Medical Diagnosis Assistant</h3>
+                            <p class="project-desc">
+                                Created an AI-powered medical diagnosis system that analyzes patient symptoms,
+                                laboratory reports, and medical images (MRI/X-ray) to assist healthcare professionals in
+                                disease detection. Implemented Convolutional Neural Networks (CNNs) for medical image
+                                analysis and developed a user-friendly interface to improve diagnostic accuracy and
+                                speed.
+                            </p>
+                            <div class="project-tech">
+                                <span>Python</span>
+                                <span>CNN</span>
+                                <span>TensorFlow</span>
+                                <span>Medical AI</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 2 -->
+                    <article class="project-card" data-project-index="1">
+                        <div class="project-content">
+                            <span class="project-num">02 / RESEARCH & IOT</span>
+                            <h3 class="project-title">Predictive Maintenance Intelligence Stack (PMIS)</h3>
+                            <p class="project-desc">
+                                Designed a unified Predictive Maintenance Intelligence Stack to standardize predictive
+                                maintenance workflows across Aerospace, Automotive, and Manufacturing sectors.
+                                Integrated real-time sensor data with AI-driven diagnostic models to create a scalable
+                                cross-industry maintenance framework. Research paper currently under development.
+                            </p>
+                            <div class="project-tech">
+                                <span>Python</span>
+                                <span>Machine Learning</span>
+                                <span>IoT</span>
+                                <span>Predictive Analytics</span>
+                                <span>Sensor Processing</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 3 (FutureMe AI with Image Slider) -->
+                    <article class="project-card" data-project-index="2">
+                        <div class="project-media-wrapper">
+                            <div class="project-slider" id="futureMeSlider">
+                                <img src="images/futureme1.png" class="slide active"
+                                    alt="FutureMe AI Overview Interface">
+                                <img src="images/futureme2.png" class="slide" alt="FutureMe AI Chat Interaction">
+                                <img src="images/futureme3.png" class="slide" alt="FutureMe AI Timeline Analytics">
+                                <img src="images/futureme4.png" class="slide" alt="FutureMe AI Setting Configuration">
+
+                                <div class="slider-controls">
+                                    <button class="slider-btn prev" aria-label="Previous image">&#10094;</button>
+                                    <button class="slider-btn next" aria-label="Next image">&#10095;</button>
+                                </div>
+                                <div class="slider-counter">
+                                    <span class="current-slide">1</span> / <span>4</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-content">
+                            <span class="project-num">03 / GENERATIVE AI</span>
+                            <h3 class="project-title">FutureMe AI</h3>
+                            <p class="project-desc">
+                                Developed an AI-powered web platform that allows users to interact with a simulated
+                                future version of themselves through personalized conversations and growth timelines.
+                                Integrated Google Gemini AI for intelligent responses and designed RESTful APIs using
+                                FastAPI with an interactive frontend for future planning and self-development.
+                            </p>
+                            <div class="project-tech">
+                                <span>Python</span>
+                                <span>FastAPI</span>
+                                <span>Google Gemini AI</span>
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 4 -->
+                    <article class="project-card" data-project-index="3">
+                        <div class="project-content">
+                            <span class="project-num">04 / DISASTER RESPONSE</span>
+                            <h3 class="project-title">ResQ – Offline Disaster Response Assistant</h3>
+                            <p class="project-desc">
+                                Built an offline AI-powered disaster response assistant using Gemma 4 via Ollama. The
+                                platform provides emergency guidance, first-aid instructions, shelter information, and
+                                disaster preparedness recommendations without requiring internet connectivity. Designed
+                                for use during floods, earthquakes, cyclones, and emergency situations.
+                            </p>
+                            <div class="project-tech">
+                                <span>React</span>
+                                <span>Tailwind CSS</span>
+                                <span>Gemma 4</span>
+                                <span>Ollama</span>
+                                <span>SQLite</span>
+                                <span>JSON</span>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="education-section reveal">
+            <div class="container">
+                <div class="section-tag">05 / EDUCATION</div>
+                <h2 class="section-title">Academic Background</h2>
+
+                <div class="editorial-education">
+                    <div class="edu-card">
+                        <div class="edu-year">2022 — 2026</div>
+                        <div class="edu-details">
+                            <h3 class="edu-degree">B.Tech Computer Science & Engineering Specialized in Artificial
+                                Intelligence & Machine Learning</h3>
+                            <p class="edu-institution">
+                                Sree Buddha College of Engineering, APJ Abdul Kalam Technological University (KTU)
+                            </p>
+                            <span class="edu-accent-line"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificates Section -->
+        <section id="certificates" class="certificates-section reveal">
+            <div class="container">
+                <div class="section-tag">06 / CERTIFICATIONS</div>
+                <h2 class="section-title">Accreditations & Training</h2>
+
+                <div class="cert-grid">
+                    <div class="cert-card">
+                        <span class="cert-idx">01</span>
+                        <h3 class="cert-name">Full Stack Web Development with AI Tools</h3>
+                        <span class="cert-line"></span>
+                    </div>
+
+                    <div class="cert-card">
+                        <span class="cert-idx">02</span>
+                        <h3 class="cert-name">AI & Robotics Training</h3>
+                        <span class="cert-line"></span>
+                    </div>
+
+                    <div class="cert-card">
+                        <span class="cert-idx">03</span>
+                        <h3 class="cert-name">Next Gen Employability Program</h3>
+                        <span class="cert-line"></span>
+                    </div>
+
+                    <div class="cert-card">
+                        <span class="cert-idx">04</span>
+                        <h3 class="cert-name">Coursera Certifications</h3>
+                        <span class="cert-line"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section reveal">
+            <div class="container">
+                <div class="section-tag">07 / GET IN TOUCH</div>
+
+                <div class="contact-box">
+                    <h2 class="contact-headline">LET'S BUILD THE FUTURE TOGETHER</h2>
+                    <p class="contact-sub">
+                        Let's connect and discuss opportunities, projects, or collaborations in AI, Web Engineering, and
+                        Data Systems.
+                    </p>
+
+                    <div class="contact-channels">
+                        <a href="mailto:nivedsunil03@gmail.com" class="channel-card">
+                            <span class="channel-type">EMAIL</span>
+                            <span class="channel-value">nivedsunil03@gmail.com</span>
+                            <svg class="channel-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
+                        </a>
+
+                        <a href="https://www.linkedin.com/in/nivedsunil/" target="_blank" class="channel-card">
+                            <span class="channel-type">LINKEDIN</span>
+                            <span class="channel-value">in/nivedsunil</span>
+                            <svg class="channel-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
+                        </a>
+
+                        <a href="https://github.com/nived1277" target="_blank" class="channel-card">
+                            <span class="channel-type">GITHUB</span>
+                            <span class="channel-value">@nived1277</span>
+                            <svg class="channel-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="contact-resume-wrapper">
+                        <a href="Nived_Sunil_Resume.pdf" download class="resume-main-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                            </svg>
+                            <span>DOWNLOAD RESUME</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 NIVED SUNIL &bull; AI & ML GRADUATE</p>
+        </div>
+    </footer>
+
+    <!-- Three.js 3D Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+
+</html>
