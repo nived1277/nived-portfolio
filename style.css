@@ -45,18 +45,30 @@
     box-sizing: border-box;
 }
 
+/* Touch & Mobile Tap Enhancements (iOS / Android) */
+a, button, input, select, textarea, .project-card, .skill-card, .photo-card, .theme-toggle-btn, .mobile-menu-btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 html {
     scroll-behavior: smooth;
-    background-color: var(--bg-black);
+    background-color: #000000;
     color: var(--text-main);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
     overflow-x: hidden;
 }
 
 body {
-    background-color: var(--bg-black);
+    background-color: transparent;
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
@@ -68,7 +80,7 @@ body {
     width: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--bg-black);
+    background: #000000;
 }
 ::-webkit-scrollbar-thumb {
     background: var(--red-deep);
@@ -101,6 +113,7 @@ body {
     pointer-events: none;
     z-index: -1;
     overflow: hidden;
+    background-color: #000000;
 }
 
 #ocean-canvas {
@@ -110,8 +123,8 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 0;
-    opacity: 0.98;
+    z-index: 1;
+    opacity: 1;
     transition: opacity 0.6s ease;
 }
 
@@ -120,13 +133,13 @@ body {
     border-radius: 50%;
     filter: blur(140px);
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
 .orb-top {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(229, 9, 20, 0.12) 0%, rgba(110, 0, 0, 0.04) 60%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 9, 20, 0.12) 0%, rgba(130, 0, 0, 0.03) 60%, transparent 70%);
     top: -200px;
     right: -150px;
 }
@@ -134,7 +147,7 @@ body {
 .orb-bottom {
     width: 700px;
     height: 700px;
-    background: radial-gradient(circle, rgba(166, 0, 0, 0.1) 0%, rgba(5, 5, 5, 0) 70%);
+    background: radial-gradient(circle, rgba(180, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
     bottom: -250px;
     left: -200px;
 }
@@ -143,11 +156,12 @@ body {
     position: absolute;
     inset: 0;
     background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 80px 80px;
-    opacity: 0.7;
-    z-index: 2;
+        radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.5) 100%),
+        linear-gradient(to right, rgba(255, 30, 40, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 30, 40, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 80px 80px, 80px 80px;
+    opacity: 0.35;
+    z-index: 3;
 }
 
 /* --- Navigation --- */
@@ -498,6 +512,24 @@ body {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
+[data-theme="light"] .project-btn {
+    background: #FFFFFF;
+    border-color: var(--red-border);
+    color: var(--text-main);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .project-btn.primary {
+    background: rgba(229, 9, 20, 0.08);
+    border-color: var(--red-border-bright);
+    color: var(--red-crystal);
+}
+
+[data-theme="light"] .project-btn.primary:hover {
+    background: var(--red-crystal);
+    color: #FFFFFF;
+}
+
 [data-theme="light"] .skill-card,
 [data-theme="light"] .skill-item {
     background: rgba(255, 255, 255, 0.9);
@@ -648,8 +680,52 @@ body {
     color: var(--text-muted);
     max-width: 820px;
     line-height: 1.7;
-    margin-bottom: 45px;
+    margin-bottom: 24px;
     letter-spacing: 0.02em;
+}
+
+/* Dedicated 3D Gothic Environment Showcase Stage */
+.hero-gothic-stage {
+    width: 100%;
+    max-width: 1050px;
+    height: 380px;
+    min-height: 280px;
+    flex-shrink: 0;
+    margin: 28px auto 35px auto;
+    position: relative;
+    border-radius: 24px;
+    border: 1px solid rgba(229, 9, 20, 0.45);
+    background: radial-gradient(circle at 50% 50%, rgba(20, 3, 7, 0.95) 0%, rgba(3, 1, 4, 0.98) 100%);
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(229, 9, 20, 0.25),
+        inset 0 0 40px rgba(0, 0, 0, 0.85);
+    overflow: hidden;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.hero-gothic-stage:hover {
+    border-color: rgba(255, 59, 59, 0.6);
+    box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.95),
+        0 0 45px rgba(229, 9, 20, 0.35),
+        inset 0 0 40px rgba(0, 0, 0, 0.85);
+}
+
+#gothic-stage-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 24px;
+}
+
+.stage-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 24px;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 30, 40, 0.2);
 }
 
 /* Hero CTA Buttons */
@@ -1232,6 +1308,61 @@ body {
     border-radius: 20px;
 }
 
+/* Project Action Buttons */
+.project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.project-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: var(--surface-soft);
+    border: 1px solid var(--red-border);
+    color: var(--text-main);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.35s var(--ease-out-expo);
+}
+
+.project-btn svg {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.project-btn:hover {
+    background: var(--surface-hover);
+    border-color: var(--red-crystal);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px var(--red-glow);
+}
+
+.project-btn:hover svg {
+    transform: translate(2px, -2px);
+    color: var(--red-bright);
+}
+
+.project-btn.primary {
+    background: rgba(229, 9, 20, 0.15);
+    border-color: var(--red-border-bright);
+    color: #ffffff;
+}
+
+.project-btn.primary:hover {
+    background: var(--red-crystal);
+    border-color: var(--red-bright);
+    box-shadow: 0 6px 22px var(--red-glow);
+}
+
 /* Project Image Slider (FutureMe AI) */
 .project-media-wrapper {
     width: 100%;
@@ -1578,6 +1709,10 @@ body {
     .project-card:has(.project-media-wrapper) {
         grid-template-columns: 1fr;
     }
+
+    .hero-gothic-stage {
+        height: 320px;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -1592,20 +1727,23 @@ body {
 
     .nav-links {
         position: fixed;
-        top: 85px;
-        left: 5%;
-        right: 5%;
-        width: 90%;
+        top: max(80px, calc(65px + env(safe-area-inset-top)));
+        left: 4%;
+        right: 4%;
+        width: 92%;
+        max-height: calc(82vh - env(safe-area-inset-top));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         background: rgba(10, 10, 14, 0.96);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--red-border-bright);
         border-radius: 24px;
-        padding: 24px 16px;
+        padding: 20px 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
+        gap: 14px;
         z-index: 1001;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--red-glow);
         opacity: 0;
@@ -1622,7 +1760,7 @@ body {
 
     .nav-link {
         font-size: 1rem;
-        padding: 8px 16px;
+        padding: 10px 16px;
         width: 100%;
         text-align: center;
         border-radius: 12px;
@@ -1636,11 +1774,15 @@ body {
     }
 
     .hero-title {
-        font-size: clamp(2.8rem, 12vw, 5.5rem);
+        font-size: clamp(2.8rem, 11vw, 5.5rem);
     }
 
     .hero-section {
-        padding: 100px 16px 60px 16px;
+        padding: 100px 16px 50px 16px;
+    }
+
+    .hero-gothic-stage {
+        height: 270px;
     }
 
     .stats-grid {
@@ -1709,6 +1851,10 @@ body {
         gap: 12px;
     }
 
+    .site-footer {
+        padding-bottom: max(40px, env(safe-area-inset-bottom));
+    }
+
     /* Skills marquee responsive styling */
     .skills-section {
         padding: 70px 0;
@@ -1740,6 +1886,112 @@ body {
 
     .marquee-fade {
         width: 22vw;
+    }
+}
+
+/* Extra Small Smartphones (Android & iOS) */
+@media screen and (max-width: 480px) {
+    .container {
+        width: 92%;
+    }
+
+    .hero-title {
+        font-size: clamp(2.2rem, 11.5vw, 3.8rem);
+        margin-bottom: 20px;
+    }
+
+    .hero-tag {
+        font-size: 0.72rem;
+        padding: 5px 14px;
+        letter-spacing: 0.15em;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .hero-gothic-stage {
+        height: 230px;
+        min-height: 200px;
+        margin: 18px auto 25px auto;
+        border-radius: 16px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 24px;
+        min-height: 48px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px 12px;
+    }
+
+    .stat-num {
+        font-size: 1.75rem;
+    }
+
+    .stat-label {
+        font-size: 0.72rem;
+    }
+
+    .project-card {
+        padding: 20px 14px;
+    }
+
+    .project-title {
+        font-size: 1.35rem;
+    }
+
+    .project-desc {
+        font-size: 0.92rem;
+        line-height: 1.65;
+    }
+
+    .project-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .project-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+
+    .contact-box {
+        padding: 28px 14px;
+    }
+
+    .channel-card {
+        padding: 18px 12px;
+        word-break: break-word;
+    }
+
+    .channel-value {
+        font-size: 0.85rem;
+    }
+
+    .resume-main-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 48px;
+        padding: 14px 24px;
     }
 }
 

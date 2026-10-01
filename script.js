@@ -2,7 +2,7 @@
    NIVED SUNIL PORTFOLIO — INTERACTIVE JAVASCRIPT CONTROLLER
    ========================================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initApp() {
     
     /* ----------------------------------------------------------------------
        0. THEME TOGGLE CONTROLLER
@@ -392,292 +392,267 @@ document.addEventListener("DOMContentLoaded", () => {
         rootMargin: "0px 0px -50px 0px"
     });
 
-    revealElements.forEach((el) => revealObserver.observe(el));
-
-    /* ----------------------------------------------------------------------
-       8. 3D OCEAN WAVE INTERACTIVE BACKGROUND ENGINE (Three.js WebGL Shader)
+    revealElements.forEach((el) => revealObserver.observe(el));    /* ----------------------------------------------------------------------
+       8. DEDICATED 3D GOTHIC HERO STAGE ENGINE (High-Performance Canvas 2D Engine)
        ---------------------------------------------------------------------- */
-    function init3DOceanWave() {
-        const canvas = document.getElementById("ocean-canvas");
-        if (!canvas || typeof THREE === "undefined") return;
+    function initHeroGothicStage() {
+        const canvas = document.getElementById("gothic-stage-canvas");
+        const container = document.getElementById("gothicStage");
+        if (!canvas || !container) return;
 
-        // Prefers-reduced-motion check
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
 
-        // Detect mobile for resolution / geometry grid adjustment
-        const isMobile = window.innerWidth < 768;
-        const gridSegments = isMobile ? 60 : 130;
+        function getStageWidth() { return container.clientWidth || 800; }
+        function getStageHeight() { return container.clientHeight || 380; }
 
-        // Scene, Camera, Renderer
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 15, 20);
-        camera.lookAt(0, -0.5, 0);
+        let stageW = getStageWidth();
+        let stageH = getStageHeight();
+        canvas.width = stageW;
+        canvas.height = stageH;
 
-        const renderer = new THREE.WebGLRenderer({
-            canvas: canvas,
-            alpha: true,
-            antialias: !isMobile,
-            powerPreference: "high-performance"
-        });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        let mouseX = 0, mouseY = 0;
+        let targetMouseX = 0, targetMouseY = 0;
 
-        // Plane Geometry tilted horizontally (generous coverage)
-        const geometry = new THREE.PlaneGeometry(75, 55, gridSegments, gridSegments);
-
-        // Mouse & Raycasting Setup for Pixel-Perfect 3D Pointer Tracking
-        const raycaster = new THREE.Raycaster();
-        const mouseNDC = new THREE.Vector2(0, 0);
-        const targetMouseLocal = new THREE.Vector2(0, 0);
-        const currentMouseLocal = new THREE.Vector2(0, 0);
-        let mouseActiveTarget = 0.0;
-        let mouseActiveCurrent = 0.0;
-
-        // GLSL Custom Shaders
-        const vertexShader = `
-            uniform float u_time;
-            uniform vec2 u_mouseLocal;
-            uniform float u_mouseActive;
-            uniform float u_reducedMotion;
-
-            varying vec3 vNormal;
-            varying vec3 vPosition;
-            varying float vDisplacement;
-            varying float vMouseDist;
-
-            // Compound sine & wave function for continuous ambient liquid swells
-            float calculateWave(vec2 pos, float time) {
-                if (u_reducedMotion > 0.5) return 0.0;
-
-                float z = 0.0;
-                z += sin(pos.x * 0.22 + time * 0.95) * 0.55;
-                z += cos(pos.y * 0.28 + time * 0.75) * 0.45;
-                z += sin((pos.x * 0.6 + pos.y * 0.8) * 0.2 + time * 1.2) * 0.35;
-                z += cos(sqrt(pos.x * pos.x + pos.y * pos.y) * 0.35 - time * 1.1) * 0.25;
-                return z;
-            }
-
-            void main() {
-                vec3 pos = position;
-                float time = u_time;
-
-                // Continuous ambient wave elevation (always active)
-                float waveZ = calculateWave(pos.xy, time);
-
-                // Interactive liquid ripple displacement under pointer
-                float dist = distance(pos.xy, u_mouseLocal);
-                vMouseDist = dist;
-
-                float rippleRadius = 8.5;
-                if (dist < rippleRadius && u_reducedMotion < 0.5) {
-                    float factor = pow(1.0 - dist / rippleRadius, 1.4) * u_mouseActive;
-                    // Dynamic concentric liquid ripple rings + smooth finger dip at center
-                    float ripple = sin(dist * 3.8 - time * 7.5) * 0.75 * factor;
-                    float dip = -0.9 * exp(-dist * 0.45) * factor;
-                    waveZ += ripple + dip;
-                }
-
-                pos.z += waveZ;
-                vDisplacement = waveZ;
-                vPosition = pos;
-
-                // Compute exact surface normal for vivid specular lighting
-                float delta = 0.08;
-                float waveX = calculateWave(pos.xy + vec2(delta, 0.0), time);
-                float waveY = calculateWave(pos.xy + vec2(0.0, delta), time);
-                vec3 normalApprox = normalize(vec3(
-                    (pos.z - waveX) / delta,
-                    (pos.z - waveY) / delta,
-                    1.0
-                ));
-                vNormal = normalMatrix * normalApprox;
-
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-            }
-        `;
-
-        const fragmentShader = `
-            uniform float u_time;
-            uniform vec2 u_mouseLocal;
-            uniform float u_mouseActive;
-
-            varying vec3 vNormal;
-            varying vec3 vPosition;
-            varying float vDisplacement;
-            varying float vMouseDist;
-
-            void main() {
-                vec3 normal = normalize(vNormal);
-                vec3 viewDir = normalize(-vPosition);
-
-                // High Contrast Deep Crystal-Red Palette
-                vec3 deepCrimsonBase = vec3(0.08, 0.005, 0.015); // Deep wine trough (#140104)
-                vec3 richCrimson     = vec3(0.42, 0.02, 0.05);   // Rich deep red body (#6B050D)
-                vec3 crystalRed      = vec3(0.88, 0.05, 0.10);   // Pure vibrant crystal red crest (#E00D1A)
-                vec3 brightGlint     = vec3(1.00, 0.28, 0.30);   // Bright specular highlight (#FF474D)
-
-                // Elevation gradient (troughs dark crimson, crests vibrant crystal red)
-                float elev = clamp((vDisplacement + 1.1) / 2.2, 0.0, 1.0);
-                vec3 liquidSurface = mix(deepCrimsonBase, richCrimson, smoothstep(0.05, 0.55, elev));
-                liquidSurface = mix(liquidSurface, crystalRed, smoothstep(0.45, 0.95, elev));
-
-                // Metallic Liquid Specular Highlights
-                vec3 lightDir1 = normalize(vec3(0.4, 0.7, 0.9));
-                vec3 lightDir2 = normalize(vec3(-0.5, -0.3, 0.7));
-
-                vec3 halfDir = normalize(lightDir1 + viewDir);
-                float spec = pow(max(dot(normal, halfDir), 0.0), 24.0);
-                vec3 specHighlight = mix(crystalRed, brightGlint, spec) * spec * 1.35;
-
-                // Secondary soft fill light
-                float diff2 = max(dot(normal, lightDir2), 0.0);
-                vec3 secondaryGlow = richCrimson * diff2 * 0.45;
-
-                // Fresnel Edge Sheen
-                float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 3.0);
-                vec3 fresnelEdge = mix(richCrimson, brightGlint, fresnel) * fresnel * 0.75;
-
-                // Interactive Pointer Liquid Ripple Highlight Ring
-                float mouseGlow = 0.0;
-                if (vMouseDist < 8.5) {
-                    float factor = (1.0 - vMouseDist / 8.5) * u_mouseActive;
-                    float ringPattern = sin(vMouseDist * 3.8 - u_time * 7.5) * 0.5 + 0.5;
-                    mouseGlow = pow(factor, 1.3) * (0.5 + ringPattern * 0.5) * 0.9;
-                }
-                vec3 mouseHighlight = mix(crystalRed, brightGlint, mouseGlow) * mouseGlow * 1.2;
-
-                // Composite final crystal-red liquid surface
-                vec3 finalColor = liquidSurface + specHighlight + secondaryGlow + fresnelEdge + mouseHighlight;
-
-                // Atmospheric opacity fade at outer viewport edges
-                float edgeFade = smoothstep(26.0, 12.0, length(vPosition.xy));
-                float alpha = clamp(0.78 + elev * 0.2 + mouseGlow * 0.25, 0.60, 0.98) * edgeFade;
-
-                gl_FragColor = vec4(finalColor, alpha);
-            }
-        `;
-
-        const material = new THREE.ShaderMaterial({
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader,
-            uniforms: {
-                u_time: { value: 0.0 },
-                u_mouseLocal: { value: new THREE.Vector2(0, 0) },
-                u_mouseActive: { value: 0.0 },
-                u_reducedMotion: { value: prefersReducedMotion ? 1.0 : 0.0 }
-            },
-            transparent: true,
-            side: THREE.DoubleSide,
-            depthWrite: false
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.x = -Math.PI / 2.3;
-        mesh.position.set(0, -2, -4);
-        scene.add(mesh);
-
-        // Invisible Mathematical Plane matching mesh orientation for exact Raycasting
-        const MathPlane = new THREE.Plane();
-        MathPlane.setFromNormalAndCoplanarPoint(
-            new THREE.Vector3(0, Math.sin(Math.PI / 2.3), Math.cos(Math.PI / 2.3)),
-            mesh.position
-        );
-
-        // Mouse Listeners anywhere on page
         window.addEventListener("mousemove", (e) => {
-            mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
-            mouseActiveTarget = 1.0;
-
-            // Raycast mouse position onto the wave plane
-            raycaster.setFromCamera(mouseNDC, camera);
-            const hitPoint = new THREE.Vector3();
-            if (raycaster.ray.intersectPlane(MathPlane, hitPoint)) {
-                // Convert world hit point into mesh local space
-                mesh.worldToLocal(hitPoint);
-                targetMouseLocal.set(hitPoint.x, hitPoint.y);
-            }
+            const rect = canvas.getBoundingClientRect();
+            targetMouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+            targetMouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
         }, { passive: true });
 
-        window.addEventListener("mouseenter", () => {
-            mouseActiveTarget = 1.0;
-        });
-
-        window.addEventListener("mouseleave", () => {
-            mouseActiveTarget = 0.0;
-        });
-
-        // Touch movement support for mobile/tablets
         window.addEventListener("touchmove", (e) => {
-            if (e.touches.length > 0) {
+            if (e.touches && e.touches.length > 0) {
+                const rect = canvas.getBoundingClientRect();
                 const touch = e.touches[0];
-                mouseNDC.x = (touch.clientX / window.innerWidth) * 2 - 1;
-                mouseNDC.y = -(touch.clientY / window.innerHeight) * 2 + 1;
-                mouseActiveTarget = 1.0;
-
-                raycaster.setFromCamera(mouseNDC, camera);
-                const hitPoint = new THREE.Vector3();
-                if (raycaster.ray.intersectPlane(MathPlane, hitPoint)) {
-                    mesh.worldToLocal(hitPoint);
-                    targetMouseLocal.set(hitPoint.x, hitPoint.y);
-                }
+                targetMouseX = ((touch.clientX - rect.left) / rect.width - 0.5) * 2;
+                targetMouseY = ((touch.clientY - rect.top) / rect.height - 0.5) * 2;
             }
         }, { passive: true });
 
-        // Window Resize Handler
-        window.addEventListener("resize", () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
-        });
-
-        // Animation Loop
-        let clock = new THREE.Clock();
-        let isTabVisible = !document.hidden;
-        let isCanvasVisible = true;
-
-        document.addEventListener("visibilitychange", () => {
-            isTabVisible = !document.hidden;
-        });
-
-        if ("IntersectionObserver" in window) {
-            const canvasObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    isCanvasVisible = entry.isIntersecting;
-                });
-            }, { threshold: 0.01 });
-            canvasObserver.observe(canvas);
+        // Cloud objects
+        const canvasClouds = [];
+        for (let i = 0; i < 8; i++) {
+            canvasClouds.push({
+                x: Math.random() * 900,
+                y: 15 + Math.random() * 120,
+                r: 65 + Math.random() * 75,
+                speed: 0.3 + Math.random() * 0.5,
+                opacity: 0.35 + Math.random() * 0.4
+            });
         }
 
-        function animate() {
-            requestAnimationFrame(animate);
-
-            if (!isTabVisible || !isCanvasVisible) return;
-
-            const elapsedTime = clock.getElapsedTime();
-            material.uniforms.u_time.value = elapsedTime;
-
-            // Smooth fluid lerp for mouse ripple position & active state
-            currentMouseLocal.lerp(targetMouseLocal, 0.09);
-            material.uniforms.u_mouseLocal.value.copy(currentMouseLocal);
-
-            mouseActiveCurrent += (mouseActiveTarget - mouseActiveCurrent) * 0.08;
-            material.uniforms.u_mouseActive.value = mouseActiveCurrent;
-
-            // Continuous subtle ambient mesh movement
-            if (!prefersReducedMotion) {
-                mesh.rotation.z = Math.sin(elapsedTime * 0.12) * 0.03;
-            }
-
-            renderer.render(scene, camera);
+        // Bat objects
+        const canvasBats = [];
+        for (let b = 0; b < 7; b++) {
+            canvasBats.push({
+                x: Math.random() * 900,
+                y: 35 + Math.random() * 160,
+                speedX: 1.8 + Math.random() * 2.4,
+                speedY: (Math.random() - 0.5) * 0.9,
+                scale: 0.75 + Math.random() * 0.65,
+                wingAngle: Math.random() * Math.PI * 2
+            });
         }
 
-        animate();
+        let animTime = 0;
+
+        function draw2DStage() {
+            requestAnimationFrame(draw2DStage);
+            animTime += 0.035;
+
+            mouseX += (targetMouseX - mouseX) * 0.06;
+            mouseY += (targetMouseY - mouseY) * 0.06;
+
+            const newW = container.clientWidth || 800;
+            const newH = container.clientHeight || 380;
+            if (canvas.width !== newW) canvas.width = newW;
+            if (canvas.height !== newH) canvas.height = newH;
+            stageW = canvas.width;
+            stageH = canvas.height;
+
+            // 1. Background Atmosphere: Deep Black into Crimson Core
+            const bgGrad = ctx.createRadialGradient(
+                stageW * 0.38 + mouseX * 25, stageH * 0.35 + mouseY * 15, 20,
+                stageW * 0.5, stageH * 0.5, stageW * 0.8
+            );
+            bgGrad.addColorStop(0, "#2d0309");
+            bgGrad.addColorStop(0.35, "#140105");
+            bgGrad.addColorStop(0.75, "#060002");
+            bgGrad.addColorStop(1, "#020001");
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, stageW, stageH);
+
+            // 2. Large Glowing Crystal-Red Moon (Positioned Left-Center)
+            const moonX = stageW * 0.30 + mouseX * 18;
+            const moonY = stageH * 0.32 + mouseY * 12;
+            const moonR = 56;
+
+            // Outer Volumetric Crimson Glow Aura
+            const moonOuterGlow = ctx.createRadialGradient(moonX, moonY, moonR * 0.2, moonX, moonY, moonR * 3.5);
+            moonOuterGlow.addColorStop(0, "rgba(255, 30, 50, 0.75)");
+            moonOuterGlow.addColorStop(0.35, "rgba(200, 0, 25, 0.4)");
+            moonOuterGlow.addColorStop(0.7, "rgba(100, 0, 15, 0.15)");
+            moonOuterGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+            ctx.fillStyle = moonOuterGlow;
+            ctx.beginPath();
+            ctx.arc(moonX, moonY, moonR * 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Moon Body with Crystal Red Texture Gradient
+            const moonGrad = ctx.createRadialGradient(moonX - 15, moonY - 15, 6, moonX, moonY, moonR);
+            moonGrad.addColorStop(0, "#ff7b8e");
+            moonGrad.addColorStop(0.3, "#ff1a2a");
+            moonGrad.addColorStop(0.65, "#b3000d");
+            moonGrad.addColorStop(0.9, "#590005");
+            moonGrad.addColorStop(1, "#260002");
+            ctx.fillStyle = moonGrad;
+            ctx.beginPath();
+            ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Moon Surface Craters/Crystals
+            ctx.fillStyle = "rgba(255, 180, 190, 0.35)";
+            ctx.beginPath();
+            ctx.arc(moonX - 18, moonY - 10, 8, 0, Math.PI * 2);
+            ctx.arc(moonX + 12, moonY + 18, 11, 0, Math.PI * 2);
+            ctx.arc(moonX + 22, moonY - 14, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3. Volumetric Dark-Red Drifting Clouds
+            canvasClouds.forEach((c) => {
+                c.x += c.speed;
+                if (c.x - c.r > stageW + 50) c.x = -c.r - 20;
+
+                const cx = c.x + mouseX * 28;
+                const cy = c.y + mouseY * 14;
+
+                const cGrad = ctx.createRadialGradient(cx, cy, 8, cx, cy, c.r);
+                cGrad.addColorStop(0, `rgba(185, 12, 32, ${c.opacity})`);
+                cGrad.addColorStop(0.5, `rgba(90, 4, 16, ${c.opacity * 0.55})`);
+                cGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+                ctx.fillStyle = cGrad;
+                ctx.beginPath();
+                ctx.arc(cx, cy, c.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 4. Distant Red Gothic Mansion (Positioned Right Side)
+            const mX = stageW * 0.72 + mouseX * 32;
+            const mY = stageH * 0.54 + mouseY * 20;
+
+            // Mansion Base Structure & Towers
+            ctx.fillStyle = "#0c0205";
+            // Central Citadel Body
+            ctx.fillRect(mX - 40, mY - 50, 80, 75);
+            // Main Roof Triangular Spire
+            ctx.beginPath();
+            ctx.moveTo(mX - 46, mY - 50);
+            ctx.lineTo(mX, mY - 115);
+            ctx.lineTo(mX + 46, mY - 50);
+            ctx.fill();
+
+            // Left Spire Tower
+            ctx.fillRect(mX - 80, mY - 35, 35, 90);
+            ctx.beginPath();
+            ctx.moveTo(mX - 86, mY - 35);
+            ctx.lineTo(mX - 62, mY - 88);
+            ctx.lineTo(mX - 38, mY - 35);
+            ctx.fill();
+
+            // Right Spire Tower
+            ctx.fillRect(mX + 45, mY - 35, 35, 90);
+            ctx.beginPath();
+            ctx.moveTo(mX + 39, mY - 35);
+            ctx.lineTo(mX + 62, mY - 88);
+            ctx.lineTo(mX + 85, mY - 35);
+            ctx.fill();
+
+            // Glowing Crimson Windows with Soft Flicker
+            const winFlicker = Math.sin(animTime * 3.5) * 0.22 + 0.78;
+            ctx.fillStyle = `rgba(255, 35, 50, ${winFlicker})`;
+
+            // Main Citadel Windows
+            ctx.fillRect(mX - 18, mY - 30, 10, 16);
+            ctx.fillRect(mX + 8, mY - 30, 10, 16);
+            ctx.fillRect(mX - 18, mY + 0, 10, 16);
+            ctx.fillRect(mX + 8, mY + 0, 10, 16);
+
+            // Tower Windows
+            ctx.fillRect(mX - 68, mY - 18, 8, 14);
+            ctx.fillRect(mX + 58, mY - 18, 8, 14);
+
+            // Gothic Rose Window Center
+            ctx.beginPath();
+            ctx.arc(mX, mY - 75, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 5. Stylized Red Gothic Trees (Flanking Left and Right Foreground)
+            // Left Gothic Tree
+            const ltX = stageW * 0.10 + mouseX * 45;
+            const ltY = stageH * 1.0;
+            ctx.fillStyle = "#080104";
+            ctx.beginPath();
+            ctx.moveTo(ltX, ltY);
+            ctx.lineTo(ltX + 18, ltY - 165);
+            ctx.lineTo(ltX + 36, ltY);
+            ctx.fill();
+
+            // Left Foliage Clusters (Layered Crimson Shading)
+            ctx.fillStyle = "rgba(180, 5, 22, 0.85)";
+            ctx.beginPath();
+            ctx.arc(ltX + 18, ltY - 175, 55, 0, Math.PI * 2);
+            ctx.arc(ltX - 15, ltY - 145, 40, 0, Math.PI * 2);
+            ctx.arc(ltX + 48, ltY - 145, 40, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Right Gothic Tree
+            const rtX = stageW * 0.90 + mouseX * 45;
+            const rtY = stageH * 1.0;
+            ctx.fillStyle = "#080104";
+            ctx.beginPath();
+            ctx.moveTo(rtX, rtY);
+            ctx.lineTo(rtX - 18, rtY - 175);
+            ctx.lineTo(rtX - 36, rtY);
+            ctx.fill();
+
+            // Right Foliage Clusters
+            ctx.fillStyle = "rgba(225, 12, 35, 0.9)";
+            ctx.beginPath();
+            ctx.arc(rtX - 18, rtY - 185, 58, 0, Math.PI * 2);
+            ctx.arc(rtX - 50, ltY - 152, 42, 0, Math.PI * 2);
+            ctx.arc(rtX + 14, ltY - 152, 42, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 6. Flying Crimson 3D Bats with Animated Wing Flaps
+            canvasBats.forEach((bat) => {
+                bat.x += bat.speedX;
+                bat.y += Math.sin(animTime * 2.4 + bat.x * 0.02) * bat.speedY;
+                bat.wingAngle += 0.32;
+
+                if (bat.x > stageW + 50) bat.x = -50;
+
+                const bx = bat.x + mouseX * 65;
+                const by = bat.y + mouseY * 45;
+                const wing = Math.sin(bat.wingAngle) * 14 * bat.scale;
+
+                ctx.fillStyle = "#ff2233";
+                ctx.beginPath();
+                // Bat Head & Body
+                ctx.arc(bx, by, 4 * bat.scale, 0, Math.PI * 2);
+                // Left Wing
+                ctx.moveTo(bx, by);
+                ctx.lineTo(bx - 18 * bat.scale, by - wing);
+                ctx.lineTo(bx - 8 * bat.scale, by + 5 * bat.scale);
+                // Right Wing
+                ctx.moveTo(bx, by);
+                ctx.lineTo(bx + 18 * bat.scale, by - wing);
+                ctx.lineTo(bx + 8 * bat.scale, by + 5 * bat.scale);
+                ctx.fill();
+            });
+        }
+
+        draw2DStage();
     }
-
-    init3DOceanWave();
 
     /* ----------------------------------------------------------------------
        9. CINEMATIC DESK INTRO CONTROLLER & 3D ZOOM TRANSITION
@@ -688,16 +663,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const deskScene = document.querySelector(".desk-scene");
         if (!introOverlay) return;
 
-        // Check session storage so repeat navigations skip intro smoothly
-        const introSeen = sessionStorage.getItem("ns_portfolio_intro_seen");
+        let introSeen = null;
+        try {
+            introSeen = sessionStorage.getItem("ns_portfolio_intro_seen");
+        } catch(e) {}
 
-        if (introSeen === "true") {
+        if (introSeen === "true" || window.location.search.includes("skip_intro=1")) {
             introOverlay.classList.add("hidden-intro");
+            introOverlay.style.display = "none";
             document.body.classList.remove("intro-active");
             return;
         }
 
-        // Freeze body scrolling during intro
         document.body.classList.add("intro-active");
 
         let isTransitioning = false;
@@ -707,12 +684,17 @@ document.addEventListener("DOMContentLoaded", () => {
             isTransitioning = true;
 
             introOverlay.classList.add("zooming-in");
-            sessionStorage.setItem("ns_portfolio_intro_seen", "true");
+            try { sessionStorage.setItem("ns_portfolio_intro_seen", "true"); } catch(e){}
 
             setTimeout(() => {
                 document.body.classList.remove("intro-active");
                 introOverlay.classList.add("hidden-intro");
+                introOverlay.style.display = "none";
             }, 900);
+        }
+
+        if (introOverlay) {
+            introOverlay.addEventListener("click", triggerPortfolioZoom);
         }
 
         if (deskScene) {
@@ -726,7 +708,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Keyboard ENTER or SPACE trigger
+        window.addEventListener("click", () => {
+            if (introOverlay && !introOverlay.classList.contains("hidden-intro")) {
+                triggerPortfolioZoom();
+            }
+        });
+
         window.addEventListener("keydown", (e) => {
             if (!introOverlay.classList.contains("hidden-intro") && (e.key === "Enter" || e.key === " ")) {
                 triggerPortfolioZoom();
@@ -734,5 +721,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    initCinematicIntro();
-});
+    // Call intro first, then stage initialization safely
+    try {
+        initCinematicIntro();
+    } catch(e) {
+        console.error("Cinematic intro error:", e);
+    }
+
+    try {
+        initHeroGothicStage();
+    } catch(e) {
+        console.error("Gothic stage init error:", e);
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initApp);
+} else {
+    initApp();
+}

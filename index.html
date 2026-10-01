@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Nived Sunil | Portfolio — AI/ML Specialist & Data Engineer</title>
     <meta name="description"
         content="Personal Portfolio of Nived Sunil - Computer Science & Engineering Specialized in AI & ML Graduate, Web Intern.">
@@ -20,9 +23,16 @@
 </head>
 
 <body>
+    <script>
+        try {
+            if (sessionStorage.getItem("ns_portfolio_intro_seen") === "true" || window.location.search.indexOf("skip_intro") !== -1) {
+                document.write('<style>#cinematic-intro { display: none !important; } body.intro-active { overflow: auto !important; }</style>');
+            }
+        } catch(e) {}
+    </script>
 
     <!-- Cinematic Desk Setup Intro Screen -->
-    <div id="cinematic-intro" class="cinematic-intro">
+    <div id="cinematic-intro" class="cinematic-intro" onclick="this.style.display='none'; document.body.classList.remove('intro-active');">
         <div class="desk-environment">
             <!-- Ambient LED Backlight Glow Behind Monitor -->
             <div class="desk-red-glow"></div>
@@ -53,7 +63,7 @@
                                 <!-- Interactive Enter Portfolio Overlay -->
                                 <div class="screen-enter-overlay">
                                     <button class="enter-portfolio-btn" id="enterPortfolioBtn"
-                                        aria-label="Enter Portfolio">
+                                        aria-label="Enter Portfolio" onclick="document.getElementById('cinematic-intro').style.display='none'; document.body.classList.remove('intro-active');">
                                         <span class="pulse-ring"></span>
                                         <span class="btn-icon">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -87,9 +97,8 @@
         </div>
     </div>
 
-    <!-- Ambient Background Canvas / Grid Overlay -->
+    <!-- Ambient Background / Grid Overlay -->
     <div class="ambient-bg">
-        <canvas id="ocean-canvas"></canvas>
         <div class="glow-orb orb-top"></div>
         <div class="glow-orb orb-bottom"></div>
         <div class="grid-overlay"></div>
@@ -176,6 +185,12 @@
                     Web Intern | Data Engineer
                 </p>
 
+                <!-- Dedicated 3D Gothic Stage Container -->
+                <div class="hero-gothic-stage" id="gothicStage">
+                    <canvas id="gothic-stage-canvas"></canvas>
+                    <div class="stage-vignette"></div>
+                </div>
+
                 <div class="hero-actions">
                     <a href="#projects" class="primary-btn">
                         <span>EXPLORE WORK</span>
@@ -221,7 +236,7 @@
                         <!-- Stats Grid -->
                         <div class="stats-grid">
                             <div class="stat-card">
-                                <div class="stat-num">4+</div>
+                                <div class="stat-num">5+</div>
                                 <div class="stat-label">Projects Built</div>
                             </div>
                             <div class="stat-card">
@@ -423,6 +438,16 @@
                                 <span>Predictive Analytics</span>
                                 <span>Sensor Processing</span>
                             </div>
+                            <div class="project-actions">
+                                <a href="https://github.com/nived1277/pmis-ui" target="_blank" rel="noopener noreferrer"
+                                    class="project-btn">
+                                    <span>GITHUB</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </article>
 
@@ -463,6 +488,16 @@
                                 <span>CSS</span>
                                 <span>JavaScript</span>
                             </div>
+                            <div class="project-actions">
+                                <a href="https://github.com/nived1277/FutureMe-AI" target="_blank" rel="noopener noreferrer"
+                                    class="project-btn">
+                                    <span>GITHUB</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </article>
 
@@ -484,6 +519,43 @@
                                 <span>Ollama</span>
                                 <span>SQLite</span>
                                 <span>JSON</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Project Card 5 -->
+                    <article class="project-card" data-project-index="4">
+                        <div class="project-content">
+                            <span class="project-num">05 / RESTAURANT DISCOVERY</span>
+                            <h3 class="project-title">Ruchi Kootu</h3>
+                            <p class="project-desc">
+                                Engineered a location-based restaurant discovery platform that helps users find nearby dining options using real-time geolocation, OpenStreetMap and Overpass API data, user ratings, reviews, and an intelligent "Ruchi Score" to rank restaurants. Built with React and Leaflet, the interface features an interactive map, responsive UI design, and AI-assisted recommendations.
+                            </p>
+                            <div class="project-tech">
+                                <span>React</span>
+                                <span>JavaScript</span>
+                                <span>Leaflet</span>
+                                <span>OpenStreetMap</span>
+                                <span>Overpass API</span>
+                                <span>AI</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="https://ruchi-kootu.vercel.app/" target="_blank" rel="noopener noreferrer"
+                                    class="project-btn primary">
+                                    <span>LIVE DEMO</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </a>
+                                <a href="https://github.com/nived1277/Ruchi-Kootu" target="_blank" rel="noopener noreferrer"
+                                    class="project-btn">
+                                    <span>GITHUB</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5">
+                                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </article>
